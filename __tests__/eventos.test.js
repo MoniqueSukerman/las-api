@@ -1,5 +1,6 @@
 const supertest = require("supertest");
 const customExpress = require("../src/config/customExpress");
+const eventos = require("../src/models/eventos");
 
 const request = supertest(customExpress());
 
@@ -66,26 +67,26 @@ describe("API de eventos", () => {
   });
 
   // POST incluir evento
-  // test("Adicionar evento com dados válidos", async () => {
-  //   const resp = await request.post("/eventos").send({
-  //     nome: "São João",
-  //     descricao: "Festa popular - junho",
-  //     urlFoto:
-  //       "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Bloco_da_capoeira_circuito_Campo_Grande_Salvador.jpg/1920px-Bloco_da_capoeira_circuito_Campo_Grande_Salvador.jpg",
-  //     dataInicio: "2021-04-25",
-  //     dataFim: "2025-06-24",
-  //   });
-  //   expect(resp.statusCode).toBe(201);
-  //   expect(resp.body).toEqual({
-  //     id: 99,
-  //     nome: "São João",
-  //     descricao: "Festa popular - junho",
-  //     urlFoto:
-  //       "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Bloco_da_capoeira_circuito_Campo_Grande_Salvador.jpg/1920px-Bloco_da_capoeira_circuito_Campo_Grande_Salvador.jpg",
-  //     dataInicio: "2021-04-25",
-  //     dataFim: "2025-06-24",
-  //   });
-  // });
+  test("Adicionar evento com dados válidos", async () => {
+    const resp = await request.post("/eventos").send({
+      nome: "São João",
+      descricao: "Festa popular - junho",
+      urlFoto:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Bloco_da_capoeira_circuito_Campo_Grande_Salvador.jpg/1920px-Bloco_da_capoeira_circuito_Campo_Grande_Salvador.jpg",
+      dataInicio: "2123-07-25",
+      dataFim: "2125-06-24",
+    });
+    expect(resp.statusCode).toBe(201);
+    expect(resp.body).toEqual({
+      id: 99,
+      nome: "São João",
+      descricao: "Festa popular - junho",
+      urlFoto:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Bloco_da_capoeira_circuito_Campo_Grande_Salvador.jpg/1920px-Bloco_da_capoeira_circuito_Campo_Grande_Salvador.jpg",
+      dataInicio: "2123-07-25",
+      dataFim: "2125-06-24",
+    });
+  });
 
   //PUT alterar evento
   test("Alterar evento com dados válidos", async () => {
@@ -98,10 +99,23 @@ describe("API de eventos", () => {
     });
   });
 
-  //DELETE exluir evento
+  //DELETE excluir evento
   test("Excluir evento", async () => {
     const resp = await request.delete("/eventos/1");
     expect(resp.statusCode).toBe(204);
     expect(resp.body).toEqual({});
+  });
+});
+
+//Validação de datas de eventos
+
+describe("Modelo de eventos", () => {
+  //GET listar os eventos
+  test("Deve retornar verdadeiro quando a data inicial > data atual", async () => {
+    const dataEhValida = eventos.isDatasValidas({
+      dataInicio: "2022-07-20",
+      dataFim: "2022-08-20",
+    });
+    expect(dataEhValida).toBe(true);
   });
 });

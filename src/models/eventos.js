@@ -21,8 +21,9 @@ class Eventos {
   }
 
   async incluir(evento) {
-    const resp = await repositorio.incluirEvento(evento);
-    if (this.isDatasValidas(resp)) {
+    const { dataInicio, dataFim } = evento;
+    if (this.isDatasValidas({ dataInicio, dataFim })) {
+      const resp = await repositorio.incluirEvento(evento);
       return { id: resp.insertId, ...evento };
     } else {
       return { erro: "Data invalida" };
@@ -45,10 +46,10 @@ class Eventos {
 
   //Validações e funções auxiliares
 
-  isDatasValidas(evento) {
+  isDatasValidas({ dataInicio, dataFim }) {
     return (
-      moment(evento.dataInicio).isAfter(moment()) &&
-      moment(evento.dataFim).isAfter(moment(evento.dataInicio))
+      moment(dataInicio).isAfter(moment()) &&
+      moment(dataFim).isAfter(moment(dataInicio))
     );
   }
 
