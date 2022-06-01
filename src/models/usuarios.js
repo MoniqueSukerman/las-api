@@ -1,36 +1,26 @@
-const pool = require("../infraestrutura/database/conexao");
-const fetch = require("node-fetch");
 const repositorio = require("../repositorios/usuario");
+const validacao = require("../infraestrutura/validators/validators");
 
 class Usuarios {
   listar() {
-    return repositorio.listar().then((resultados) => {
-      return resultados;
-    });
+    return repositorio.listarUsuarios();
   }
 
-  buscarPorId(id, res, next) {
-    const sql = "SELECT * FROM Usuarios WHERE id = ?";
-    pool.query(sql, id, (erro, resultados) => {
-      const usuario = resultados[0];
-      if (erro) {
-        next(erro);
-      } else {
-        if (usuario) {
-          res.status(200).json(usuario);
-        } else {
-          res.status(404).end();
-        }
+  buscarPorId(id) {
+    return repositorio.buscarPorIdUsuario(id);
+  }
+
+  async adicionar(usuario) {
+    let nomeEhValido = false;
+
+    if (usuario?.nome?.length > 0) {
+      const nomeJaUtilizado = await this.isUsuarioUtilizado(usuario.nome);
+      if (!nomeJaUtilizado) {
+        nomeEhValido = true;
       }
-    });
-  }
+    }
 
-  async adicionar(usuario, res, next) {
-    const nomeEhValido =
-      usuario.nome.length > 0 &&
-      (await this.validarNomeUsuarioNaoUtilizado(usuario.nome));
-
-    const urlEhValida = await this.validarURLFotoPerfil(usuario.urlFotoPerfil);
+    const urlEhValida = await this.validarURLFotoPerfil(usuario?.urlFotoPerfil);
 
     const validacoes = [
       {
@@ -49,87 +39,145 @@ class Usuarios {
     const existemErros = erros.length;
 
     if (existemErros) {
-      res.status(400).json(erros);
+      throw { erroApp: erros };
     } else {
-      const sql = "INSERT INTO Usuarios SET ?";
-
-      pool.query(sql, usuario, (erro) => {
-        if (erro) {
-          next(erro);
-        } else {
-          res.status(201).json(usuario);
-        }
-      });
+      const resp = await repositorio.adicionaUsuario(usuario);
+      return { id: resp.insertId, ...usuario };
     }
   }
 
-  alterar(id, valores, res, next) {
-    const sql = "UPDATE Usuarios SET ? WHERE id = ?";
-    pool.query(sql, [valores, id], (erro) => {
-      if (erro) {
-        next(erro);
-      } else {
-        res.status(200).json(valores);
+  async alterar(id, valores) {
+    let nomeEhValido = false;
+
+    if (valores?.nome?.length > 0) {
+      const nomeJaUtilizado = await this.isUsuarioUtilizado(valores.nome);
+      if (!nomeJaUtilizado) {
+        nomeEhValido = true;
       }
-    });
+    }
+
+    const urlEhValida = await this.validarURLFotoPerfil(valores?.urlFotoPerfil);
+
+    const validacoes = [
+      {
+        nome: "nome",
+        valido: nomeEhValido,
+        mensagem: "Nome deve ser informado e deve ser único",
+      },
+      {
+        nome: "urlFotoPerfil",
+        valido: urlEhValida,
+        mensagem: "URL deve uma URL válida",
+      },
+    ];
+
+    const erros = validacoes.filter((campo) => !campo.valido);
+    const existemErros = erros.length;
+
+    if (existemErros) {
+      throw { erroApp: erros };
+    } else {
+      return repositorio
+        .alterarUsuario(id, valores)
+        .then((resultado) =>
+          resultado.changedRows > 0
+            ? { resultado: "Alteração feita com sucesso" }
+            : resultado
+        );
+    }
   }
 
-  excluir(id, res, next) {
-    const sql = "DELETE FROM Usuarios WHERE id = ?";
-    pool.query(sql, id, (erro) => {
-      if (erro) {
-        next(erro);
-      } else {
-        res.status(200).json({ id });
-      }
-    });
+  excluir(id) {
+    return repositorio.excluirUsuario(id);
   }
 
-  buscarPorNome(nome, res, next) {
-    const sql = "SELECT * FROM Usuarios WHERE nome like ?";
-    pool.query(sql, "%" + nome + "%", (erro, resultados) => {
-      if (erro) {
-        next(erro);
-      } else {
-        res.status(200).json(resultados);
-      }
-    });
+  buscarPorNome(nome) {
+    return repositorio.buscarPorNome(nome);
   }
 
   async validarURLFotoPerfil(url) {
-    try {
-      const regex =
-        /https?:\/\/(www.)?[-a-zA-Z0-9@:%.+~#=]{1,256}.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%+.~#?&//=]*)/gm;
-      const verificaUrl = url.match(regex);
-      if (!verificaUrl) {
-        return false;
-      }
-      const response = await fetch(url);
-      if (response.status !== 200) {
-        return false;
-      } else {
-        return true;
-      }
-    } catch {
-      return false;
+    return validacao.validarURL(url);
+  }
+
+  async isUsuarioUtilizado(nome) {
+    return repositorio.vericaNomeUsuario(nome);
+  }
+
+  //Dados pessoais
+
+  atualizarDadosPessoais(id, dadosPessoais) {
+    const cpfEhValido = validacao.cpfEhValido(dadosPessoais.cpf);
+
+    const validacoes = [
+      {
+        nome: "cpf",
+        valido: cpfEhValido,
+        mensagem: "CPF informado não é válido",
+      },
+    ];
+
+    const erros = validacoes.filter((campo) => !campo.valido);
+    const existemErros = erros.length;
+
+    if (existemErros) {
+      throw { erroApp: erros };
+    } else {
+      return repositorio
+        .atualizarDadosPessoais(id, dadosPessoais)
+        .then((resultado) =>
+          resultado.changedRows > 0
+            ? { resultado: "Alteração feita com sucesso" }
+            : resultado
+        );
     }
   }
 
-  async validarNomeUsuarioNaoUtilizado(nome) {
-    return new Promise((resolve) => {
-      const sql = "SELECT * FROM Usuarios WHERE nome = ?";
-      pool.query(sql, nome, (erro, resultados) => {
-        if (erro) {
-          resolve(false);
-        } else {
-          if (resultados.length > 0) {
-            resolve(false);
-          } else {
-            resolve(true);
-          }
-        }
-      });
-    });
+  buscarDadosPessoaisPorId(id) {
+    return repositorio.listarDadosPessoaisPorId(id);
+  }
+
+  //Contatos
+
+  atualizarContatos(id, contatos) {
+    return repositorio
+      .atualizarContatos(id, contatos)
+      .then((resultado) =>
+        resultado.changedRows > 0
+          ? { resultado: "Alteração feita com sucesso" }
+          : resultado
+      );
+  }
+
+  buscarContatosPorId(id) {
+    return repositorio.listarContatosPorId(id);
+  }
+
+  //Senha
+
+  atualizarSenha(id, novaSenha) {
+    return repositorio
+      .atualizarSenha(id, novaSenha)
+      .then((resultado) =>
+        resultado.changedRows > 0
+          ? { resultado: "Alteração feita com sucesso" }
+          : resultado
+      );
+  }
+
+  //Endereco
+
+  buscarEnderecoPorId(id) {
+    return repositorio.listarEnderecoPorId(id);
+  }
+
+  atualizarEndereco(id, endereco) {
+    return repositorio
+      .atualizarEndereco(id, endereco)
+      .then((resultado) =>
+        resultado.changedRows > 0
+          ? { resultado: "Alteração feita com sucesso" }
+          : resultado
+      );
   }
 }
 
