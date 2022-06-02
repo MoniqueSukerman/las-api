@@ -1,7 +1,7 @@
 const Usuarios = require("../models/usuarios");
 
 module.exports = (app) => {
-  app.get("/usuarios", (req, res, next) => {
+  app.get("/usuarios", (_req, res, next) => {
     Usuarios.listar()
       .then((resultados) => res.json(resultados))
       .catch((erros) => next(erros));
@@ -24,19 +24,6 @@ module.exports = (app) => {
         next(erros);
       });
   });
-
-  // app.post("/usuarios", (req, res, next) => {
-  //   const usuario = req.body;
-  //   Usuarios.adicionar(usuario)
-  //     .then((resultados) => res.status(201).json({ id: resultados.insertId }))
-  //     .catch((erros) => {
-  //       console.log(erros);
-  //       if (erros.find((error) => !error.valido)) {
-  //         res.status(406).send({ error: { message: "Usuário inválido" } });
-  //       }
-  //       next(erros);
-  //     });
-  // });
 
   app.put("/usuarios/:id", (req, res, next) => {
     const id = parseInt(req.params.id);

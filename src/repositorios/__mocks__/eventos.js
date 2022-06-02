@@ -1,4 +1,3 @@
-// const moment = require("moment");
 const eventosMock = require("./eventos.json");
 
 class Evento {

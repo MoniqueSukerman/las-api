@@ -17,7 +17,7 @@ module.exports = () => {
   consign().include("src/controllers").into(app);
 
   // eslint-disable-next-line no-unused-vars
-  app.use((err, req, res, next) => {
+  app.use((err, _req, res, _next) => {
     //erro interno da aplicação
     if (err.erroApp) {
       res.status(400).send(err.erroApp);
@@ -30,7 +30,7 @@ module.exports = () => {
     }
   });
 
-  app.get("/", (req, res) => {
+  app.get("/", (_req, res) => {
     res.send("Bem Vindo Ao LAS-API");
   });
 
