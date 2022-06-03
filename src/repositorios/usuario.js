@@ -8,7 +8,7 @@ class Usuario {
 
   buscarPorIdUsuario(id) {
     const sql = "SELECT id, nome, urlFotoPerfil FROM Usuarios WHERE id = ?";
-    return query(sql, id);
+    return query(sql, id).then((resultado) => resultado[0]);
   }
 
   adicionaUsuario(usuario) {
@@ -49,7 +49,7 @@ class Usuario {
   listarDadosPessoaisPorId(id) {
     const sql =
       "SELECT nomeCompleto, dataNascimento, rg, cpf FROM Usuarios WHERE id = ?";
-    return query(sql, id);
+    return query(sql, id).then((resultado) => resultado[0]);
   }
 
   //Contatos
@@ -61,7 +61,7 @@ class Usuario {
 
   listarContatosPorId(id) {
     const sql = "SELECT telefone, celular, email FROM Usuarios WHERE id = ?";
-    return query(sql, id);
+    return query(sql, id).then((resultado) => resultado[0]);
   }
 
   //Senha
@@ -76,7 +76,7 @@ class Usuario {
   listarEnderecoPorId(id) {
     const sql =
       "SELECT cep, endereco, numero, complemento, bairro FROM Usuarios WHERE id = ?";
-    return query(sql, id);
+    return query(sql, id).then((resultado) => resultado[0]);
   }
 
   atualizarEndereco(id, endereco) {

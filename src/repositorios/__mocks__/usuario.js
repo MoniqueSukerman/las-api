@@ -15,16 +15,15 @@ class Usuario {
 
   buscarPorIdUsuario(id) {
     const usuarioCompleto = usuariosMock.find((usuario) => usuario.id === id);
+    let usuario = null;
     if (usuarioCompleto) {
-      const usuario = {
+      usuario = {
         id: usuarioCompleto.id,
         nome: usuarioCompleto.nome,
         urlFotoPerfil: usuarioCompleto.urlFotoPerfil,
       };
-      return Promise.resolve(usuario);
-    } else {
-      return Promise.resolve({});
     }
+    return Promise.resolve(usuario);
   }
 
   async adicionaUsuario(usuario) {
@@ -71,17 +70,16 @@ class Usuario {
   }
   listarDadosPessoaisPorId(id) {
     const usuarioCompleto = usuariosMock.find((usuario) => usuario.id === id);
+    let dadosPessoais = null;
     if (usuarioCompleto) {
-      const dadosPessoais = {
+      dadosPessoais = {
         nomeCompleto: usuarioCompleto.nomeCompleto,
         dataNascimento: usuarioCompleto.dataNascimento,
         rg: usuarioCompleto.rg,
         cpf: usuarioCompleto.cpf,
       };
-      return Promise.resolve([dadosPessoais]);
-    } else {
-      return Promise.resolve([]);
     }
+    return Promise.resolve(dadosPessoais);
   }
 
   //Contatos
@@ -93,16 +91,15 @@ class Usuario {
   }
   listarContatosPorId(id) {
     const usuarioCompleto = usuariosMock.find((usuario) => usuario.id === id);
+    let contatos = null;
     if (usuarioCompleto) {
-      const contatos = {
+      contatos = {
         telefone: usuarioCompleto.telefone,
         celular: usuarioCompleto.celular,
         email: usuarioCompleto.email,
       };
-      return Promise.resolve([contatos]);
-    } else {
-      return Promise.resolve([]);
     }
+    return Promise.resolve(contatos);
   }
 
   //Senha
@@ -117,18 +114,17 @@ class Usuario {
 
   listarEnderecoPorId(id) {
     const usuarioCompleto = usuariosMock.find((usuario) => usuario.id === id);
+    let endereco = null;
     if (usuarioCompleto) {
-      const contatos = {
+      endereco = {
         cep: usuarioCompleto.cep,
         endereco: usuarioCompleto.endereco,
         numero: usuarioCompleto.numero,
         complemento: usuarioCompleto.complemento,
         bairro: usuarioCompleto.bairro,
       };
-      return Promise.resolve([contatos]);
-    } else {
-      return Promise.resolve([]);
     }
+    return Promise.resolve(endereco);
   }
   atualizarEndereco(id, endereco) {
     if (!!id && !!endereco) {

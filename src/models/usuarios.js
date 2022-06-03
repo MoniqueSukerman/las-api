@@ -85,7 +85,7 @@ class Usuarios {
 
   validarAlteracao(respostaDoBancoDeDados) {
     return respostaDoBancoDeDados.changedRows > 0
-      ? { resultados: "Alteração feita com sucesso" }
+      ? { resultado: "Alteração feita com sucesso" }
       : respostaDoBancoDeDados;
   }
 

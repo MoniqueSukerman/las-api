@@ -175,21 +175,6 @@ describe("API de Usuários", () => {
       },
     ]);
   });
-
-  // test("Deve retornar sucesso quando usuário for válido", async () => {
-  //   const resp = await request.post("/usuarios").send(novoUsuario);
-  //   expect(resp.statusCode).toBe(201);
-  //   expect(resp.body).toHaveProperty("id");
-  // });
-
-  // test("Deve retornar erro quando o usuário for inválido", async () => {
-  //   const res = await request.post("/usuarios").send({
-  //     urlFotoPerfil: "url inválida",
-  //     nome: "Renata",
-  //   });
-  //   expect(res.statusCode).toBe(406);
-  //   expect(res.body.error.message).toBe("Usuário inválido");
-  // });
 });
 
 describe("API de dados pessoais", () => {
@@ -197,14 +182,12 @@ describe("API de dados pessoais", () => {
   test("Buscar dados pessoais com id existente", async () => {
     const resp = await request.get("/usuarios/1/dados-pessoais");
     expect(resp.statusCode).toBe(200);
-    expect(resp.body).toEqual([
-      {
-        nomeCompleto: "Ana Joaquina",
-        dataNascimento: "2002-05-02",
-        rg: "123456789",
-        cpf: "12345678912",
-      },
-    ]);
+    expect(resp.body).toEqual({
+      nomeCompleto: "Ana Joaquina",
+      dataNascimento: "2002-05-02",
+      rg: "123456789",
+      cpf: "12345678912",
+    });
   });
 
   test("Buscar dados pessoais com id inexistente", async () => {
@@ -263,13 +246,11 @@ describe("API de contatos", () => {
   test("Buscar contatos com id existente", async () => {
     const resp = await request.get("/usuarios/1/contatos");
     expect(resp.statusCode).toBe(200);
-    expect(resp.body).toEqual([
-      {
-        telefone: "71987658248",
-        celular: "71965843548",
-        email: "nome@email.com.br",
-      },
-    ]);
+    expect(resp.body).toEqual({
+      telefone: "71987658248",
+      celular: "71965843548",
+      email: "nome@email.com.br",
+    });
   });
 
   test("Buscar contatos com id inexistente", async () => {
@@ -310,15 +291,13 @@ describe("API de endereço", () => {
   test("Buscar endereço com id existente", async () => {
     const resp = await request.get("/usuarios/1/endereco");
     expect(resp.statusCode).toBe(200);
-    expect(resp.body).toEqual([
-      {
-        cep: "41280070",
-        endereco: "rua de cima",
-        numero: 280,
-        complemento: "3º andar",
-        bairro: "Americanas",
-      },
-    ]);
+    expect(resp.body).toEqual({
+      cep: "41280070",
+      endereco: "rua de cima",
+      numero: 280,
+      complemento: "3º andar",
+      bairro: "Americanas",
+    });
   });
 
   test("Buscar endereço com id inexistente", async () => {
