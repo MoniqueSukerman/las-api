@@ -34,9 +34,7 @@ class Usuario {
 
   vericaNomeUsuario(nome) {
     const sql = "SELECT * FROM Usuarios WHERE nome = ?";
-    return query(sql, nome).then((data) => {
-      data.length > 0;
-    });
+    return query(sql, nome);
   }
 
   //Dados pessoais

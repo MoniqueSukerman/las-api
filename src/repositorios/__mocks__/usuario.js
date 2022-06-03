@@ -31,9 +31,11 @@ class Usuario {
   }
 
   async vericaNomeUsuario(nome) {
-    return Promise.resolve(
-      !!usuariosMock.find((usuario) => usuario.nome === nome)
+    const consulta = Promise.resolve(
+      usuariosMock.filter((usuario) => usuario.nome === nome)
     );
+
+    return consulta;
   }
 
   alterarUsuario(id, valores) {

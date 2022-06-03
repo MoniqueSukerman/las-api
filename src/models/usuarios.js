@@ -102,7 +102,8 @@ class Usuarios {
   }
 
   async isUsuarioUtilizado(nome) {
-    return repositorio.vericaNomeUsuario(nome);
+    const consulta = await repositorio.vericaNomeUsuario(nome);
+    return consulta.length > 0;
   }
 
   //Dados pessoais
