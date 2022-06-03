@@ -26,13 +26,6 @@ class Usuario {
       return Promise.resolve({});
     }
   }
-  // adicionaUsuario(usuario) {
-  //   if (usuario) {
-  //     return Promise.resolve({ insertId: 2 });
-  //   } else {
-  //     return Promise.reject();
-  //   }
-  // }
 
   async adicionaUsuario(usuario) {
     return Promise.resolve(usuario && { insertId: 99 });
