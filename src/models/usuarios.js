@@ -79,12 +79,14 @@ class Usuarios {
     } else {
       return repositorio
         .alterarUsuario(id, valores)
-        .then((resultado) =>
-          resultado.changedRows > 0
-            ? { resultado: "Alteração feita com sucesso" }
-            : resultado
-        );
+        .then(this.validarAlteracao);
     }
+  }
+
+  validarAlteracao(respostaDoBancoDeDados) {
+    return respostaDoBancoDeDados.changedRows > 0
+      ? { respostaDoBancoDeDados: "Alteração feita com sucesso" }
+      : respostaDoBancoDeDados;
   }
 
   excluir(id) {
@@ -124,11 +126,7 @@ class Usuarios {
     } else {
       return repositorio
         .atualizarDadosPessoais(id, dadosPessoais)
-        .then((resultado) =>
-          resultado.changedRows > 0
-            ? { resultado: "Alteração feita com sucesso" }
-            : resultado
-        );
+        .then(this.validarAlteracao);
     }
   }
 
@@ -141,11 +139,7 @@ class Usuarios {
   atualizarContatos(id, contatos) {
     return repositorio
       .atualizarContatos(id, contatos)
-      .then((resultado) =>
-        resultado.changedRows > 0
-          ? { resultado: "Alteração feita com sucesso" }
-          : resultado
-      );
+      .then(this.validarAlteracao);
   }
 
   buscarContatosPorId(id) {
@@ -157,11 +151,7 @@ class Usuarios {
   atualizarSenha(id, novaSenha) {
     return repositorio
       .atualizarSenha(id, novaSenha)
-      .then((resultado) =>
-        resultado.changedRows > 0
-          ? { resultado: "Alteração feita com sucesso" }
-          : resultado
-      );
+      .then(this.validarAlteracao);
   }
 
   //Endereco
@@ -173,11 +163,7 @@ class Usuarios {
   atualizarEndereco(id, endereco) {
     return repositorio
       .atualizarEndereco(id, endereco)
-      .then((resultado) =>
-        resultado.changedRows > 0
-          ? { resultado: "Alteração feita com sucesso" }
-          : resultado
-      );
+      .then(this.validarAlteracao);
   }
 }
 

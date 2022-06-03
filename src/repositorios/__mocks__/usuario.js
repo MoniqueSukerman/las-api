@@ -23,7 +23,7 @@ class Usuario {
       };
       return Promise.resolve(usuario);
     } else {
-      return Promise.resolve();
+      return Promise.resolve({});
     }
   }
   // adicionaUsuario(usuario) {
@@ -87,7 +87,7 @@ class Usuario {
       };
       return Promise.resolve([dadosPessoais]);
     } else {
-      return Promise.resolve();
+      return Promise.resolve([]);
     }
   }
 
@@ -108,7 +108,7 @@ class Usuario {
       };
       return Promise.resolve([contatos]);
     } else {
-      return Promise.resolve();
+      return Promise.resolve([]);
     }
   }
 
@@ -134,7 +134,7 @@ class Usuario {
       };
       return Promise.resolve([contatos]);
     } else {
-      return Promise.resolve();
+      return Promise.resolve([]);
     }
   }
   atualizarEndereco(id, endereco) {
