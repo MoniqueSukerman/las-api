@@ -1,5 +1,6 @@
 const repositorio = require("../repositorios/usuario");
 const validacao = require("../infraestrutura/validators/validators");
+const CustomError = require("../config/customError");
 
 class Usuarios {
   listar() {
@@ -39,7 +40,7 @@ class Usuarios {
     const existemErros = erros.length;
 
     if (existemErros) {
-      throw { erroApp: erros };
+      throw new CustomError("Ops", erros);
     } else {
       const resp = await repositorio.adicionaUsuario(usuario);
       return { id: resp.insertId, ...usuario };
@@ -75,7 +76,7 @@ class Usuarios {
     const existemErros = erros.length;
 
     if (existemErros) {
-      throw { erroApp: erros };
+      throw new CustomError("Ops", erros);
     } else {
       return repositorio
         .alterarUsuario(id, valores)
@@ -123,7 +124,7 @@ class Usuarios {
     const existemErros = erros.length;
 
     if (existemErros) {
-      throw { erroApp: erros };
+      throw new CustomError("Ops", erros);
     } else {
       return repositorio
         .atualizarDadosPessoais(id, dadosPessoais)

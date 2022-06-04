@@ -1,3 +1,5 @@
+const dotenv = require("dotenv");
+dotenv.config();
 const customExpress = require("./config/customExpress");
 const pool = require("./infraestrutura/database/conexao");
 const Tabelas = require("./infraestrutura/database/tabelas");

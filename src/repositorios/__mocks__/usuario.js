@@ -1,29 +1,31 @@
 const usuariosMock = require("./usuarios");
 
 class Usuario {
-  listarUsuarios() {
-    const usuariosCompletos = usuariosMock;
-
-    const usuarios = usuariosCompletos.map((usuario) => ({
-      id: usuario.id,
-      nome: usuario.nome,
-      urlFotoPerfil: usuario.urlFotoPerfil,
+  extrairUsuarioBasico(usuarioCompleto) {
+    return usuarioCompleto.map(({ id, urlFotoPerfil, nome }) => ({
+      id,
+      urlFotoPerfil,
+      nome,
     }));
+  }
+
+  listarUsuarios() {
+    const usuarios = this.extrairUsuarioBasico(usuariosMock);
 
     return Promise.resolve(usuarios);
   }
 
   buscarPorIdUsuario(id) {
     const usuarioCompleto = usuariosMock.find((usuario) => usuario.id === id);
-    let usuario = null;
+    let usuarioBasico = null;
     if (usuarioCompleto) {
-      usuario = {
+      usuarioBasico = {
         id: usuarioCompleto.id,
         nome: usuarioCompleto.nome,
         urlFotoPerfil: usuarioCompleto.urlFotoPerfil,
       };
     }
-    return Promise.resolve(usuario);
+    return Promise.resolve(usuarioBasico);
   }
 
   async adicionaUsuario(usuario) {
@@ -31,11 +33,9 @@ class Usuario {
   }
 
   async vericaNomeUsuario(nome) {
-    const consulta = Promise.resolve(
+    return Promise.resolve(
       usuariosMock.filter((usuario) => usuario.nome === nome)
     );
-
-    return consulta;
   }
 
   alterarUsuario(id, valores) {
@@ -54,11 +54,7 @@ class Usuario {
     }
     const usuariosCompletos = usuariosMock.filter(filtraPorParteDoNome);
 
-    const usuarios = usuariosCompletos.map((usuario) => ({
-      id: usuario.id,
-      nome: usuario.nome,
-      urlFotoPerfil: usuario.urlFotoPerfil,
-    }));
+    const usuarios = this.extrairUsuarioBasico(usuariosCompletos);
 
     return Promise.resolve(usuarios);
   }

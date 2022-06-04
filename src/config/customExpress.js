@@ -1,6 +1,8 @@
 const express = require("express");
 const consign = require("consign");
 const bodyParser = require("body-parser");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("../swagger.json");
 
 const ENV = process.env.NODE_ENV;
 
@@ -9,6 +11,8 @@ module.exports = () => {
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   app.get("/", (_req, res) => {
     res.send("Bem vindo ao LAS-API");
