@@ -13,6 +13,7 @@ describe("API de endereço", () => {
     expect(resp.body).toEqual(["RO", "AC", "AM"]);
   });
 
+  ////GET listar municipios
   test("Listar municipios", async () => {
     const resp = await request.get("/ufs/ro/municipios");
     expect(resp.statusCode).toBe(200);
