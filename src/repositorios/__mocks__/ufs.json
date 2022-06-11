@@ -1,0 +1,17 @@
+[
+  {
+    "id": 11,
+    "sigla": "RO",
+    "nome": "Rondônia"
+  },
+  {
+    "id": 12,
+    "sigla": "AC",
+    "nome": "Acre"
+  },
+  {
+    "id": 13,
+    "sigla": "AM",
+    "nome": "Amazonas"
+  }
+]

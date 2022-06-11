@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1100023,
+    "nome": "Ariquemes",
+    "UF": "RO"
+  },
+  {
+    "id": 1100031,
+    "nome": "Cabixi",
+    "UF": "RO"
+  },
+  {
+    "id": 1101492,
+    "nome": "São Francisco do Guaporé",
+    "UF": "RO"
+  },
+  {
+    "id": 1200013,
+    "nome": "Acrelândia",
+    "UF": "AC"
+  },
+  {
+    "id": 1200054,
+    "nome": "Assis Brasil",
+    "UF": "AC"
+  },
+  {
+    "id": 1200104,
+    "nome": "Brasiléia",
+    "UF": "AC"
+  }
+]
