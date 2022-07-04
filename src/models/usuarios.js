@@ -1,6 +1,6 @@
 const repositorio = require("../repositorios/usuario");
 const validacao = require("../infraestrutura/validators/validators");
-const CustomError = require("../config/customError");
+const CustomError = require("../../api/config/customError");
 
 class Usuarios {
   listar() {
